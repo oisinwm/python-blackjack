@@ -206,6 +206,9 @@ class Blackjack:
                 else:
                     self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
                     print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
+            else: #if both the player and the dealer achieve 21 in the same number of cards
+            self.pCredit += self.pBet #else it's a push, the player gets back their bet
+            print("It's a push, the dealer has the same total as you!\nYour bet of "+str(self.pBet)+" Credits has been returned. You now have "+str(self.pCredit)+" Credits")
         elif self.handValue(self.pHand) == 21: #if the player has 21, but the dealer doesn't
             if len(self.pHand) == 2: #if the player also has a natural blackjack
                 self.pCredit += round(self.pBet * 2.5) #they get an extra prize
