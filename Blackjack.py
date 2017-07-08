@@ -66,7 +66,7 @@ class Blackjack:
         values = [] #sets the variable values
 
         for c in hand: #for each card in hand, add the value of that card to a list
-            values.append(blackjack.value(c))
+            values.append(self.value(c))
         if "A" not in values:
             hValue = sum(values)
             return hValue #if there are no aces to decide, return the value of the hand
@@ -92,7 +92,7 @@ class Blackjack:
         #print(hand) #debugging
 
     def bust(self, player):
-        if blackjack.handValue(player) > 21: #if the hand value is greater than 21, the hand's owner is bust
+        if self.handValue(player) > 21: #if the hand value is greater than 21, the hand's owner is bust
             if player == self.pHand: #if it's the player who's gone bust,
                 print("\n"*100+"You've gone bust with a hand of:") #shows the player their loosing hand
                 for c in self.pHand:
@@ -124,10 +124,8 @@ class Blackjack:
                 self.computer()
             else:
                 self.bust(self.dHand) # if they are above 17 after hitting, they check if they have gone bust
-                pass
         else:
             print("\nThe dealer stands\n") #if the dealer is above 17, they stand
-            pass
 
     def bet(self): #handles the player's bets
         print("\n"*100+"You have "+str(self.pCredit)+" Credits to bet")
@@ -204,7 +202,7 @@ class Blackjack:
                 else:
                     self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
                     print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
-        elif self.handvalue(self.pHand) == 21: #if the player has 21, but the dealer doesn't
+        elif self.handValue(self.pHand) == 21: #if the player has 21, but the dealer doesn't
             if len(self.pHand) == 2: #if the player also has a natural blackjack
                 self.pCredit += round(self.pBet * 2.5) #they get an extra prize
                 print("\nYou've won "+round(self.pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
