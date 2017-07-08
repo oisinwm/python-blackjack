@@ -197,14 +197,14 @@ class Blackjack:
                 print("You win the round!\nThe you achieved 21 with less cards than the dealer") #the player wins
                 if len(self.pHand) == 2: #if the player also has a natural blackjack
                     self.pCredit += round(self.pBet * 2.5) #they get an extra prize
-                    print("\nYou've won "+round(self.pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
+                    print("\nYou've won "+str(round(self.pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
                 else:
                     self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
                     print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
         elif self.handValue(self.pHand) == 21: #if the player has 21, but the dealer doesn't
             if len(self.pHand) == 2: #if the player also has a natural blackjack
                 self.pCredit += round(self.pBet * 2.5) #they get an extra prize
-                print("\nYou've won "+round(self.pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
+                print("\nYou've won "+str(round(self.pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
             else:
                 self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
                 print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
