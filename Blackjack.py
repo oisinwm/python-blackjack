@@ -143,7 +143,7 @@ class blackjack:
     def bet(): #handles the player's bets
         global pCredit, pBet
 
-        print("\n"*100+"You have "+str(pCredit)+" Credits to bet")
+        print("You have "+str(pCredit)+" Credits to bet")
         bet = input("How much would you like to bet on this round?\n")
         if int(bet) > pCredit:
             print("\n"*100+"You can't bet more credits than you have\n")
