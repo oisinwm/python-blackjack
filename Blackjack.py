@@ -132,8 +132,7 @@ class Blackjack:
         bet = input("How much would you like to bet on this round?\n")
         if int(bet) > self.pCredit:
             print("\n"*100+"You can't bet more credits than you have\n")
-            self.bet()
-        elif int(bet) <= 5:
+        elif int(bet) < 5:
             print("\n"*100+"You must bet at least 5 Credits to play\n")
             self.bet()
         else:
