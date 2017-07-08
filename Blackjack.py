@@ -1,26 +1,23 @@
 import itertools, random, time #imports required libraries
 
-deck = [] #sets the variable deck
+class Blackjack:
+    deck = [] #sets the variable deck
 
-pHand = [] #sets the player's empty hand
-dHand = [] #sets the dealer's empty hand
+    pHand = [] #sets the player's empty hand
+    dHand = [] #sets the dealer's empty hand
 
-pCredit = 100 #sets the player's starting credit
-pBet = 0
-#dCredit = 10000 #sets the credit for the dealer, currently unused
+    pCredit = 100 #sets the player's starting credit
+    pBet = 0
+    #dCredit = 10000 #sets the credit for the dealer, currently unused
+    def deal(self): # deals ths hand by taking two random cards from the deck and removing them, does this for both the player and the dealer
+        self.pHand = random.sample(self.deck, 2)
+        self.deck = [x for x in self.deck if x not in self.pHand]
+        self.dHand = random.sample(self.deck, 2)
+        self.deck = [x for x in self.deck if x not in self.dHand]
+        #print(self.pHand) #debugging
+        #print(self.dHand) #debugging
 
-class blackjack:
-    def deal(): # deals ths hand by taking two random cards from the deck and removing them, does this for both the player and the dealer
-        global deck, pHand, dHand
-
-        pHand = random.sample(deck, 2)
-        deck = [x for x in deck if x not in pHand]
-        dHand = random.sample(deck, 2)
-        deck = [x for x in deck if x not in dHand]
-        #print(pHand) #debugging
-        #print(dHand) #debugging
-
-    def card(toCheck): #checks a card and returns its printable name
+    def card(self, toCheck): #checks a card and returns its printable name
         toCheck = list(toCheck) #splits the card into a list of its features, suit then rank
 
         if toCheck[0] == "c": #checks the first value to find the card's suit
@@ -47,7 +44,7 @@ class blackjack:
 
         return cRank + cSuit #returns the printable name of the card
 
-    def value(toValue): #checks the value of a card
+    def value(self, toValue): #checks the value of a card
         toValue = list(toValue) #splits the card into a list of its features, suit then rank
         toValue = toValue[1] #takes only the rank of the card
 
@@ -65,11 +62,11 @@ class blackjack:
             cValue = int(toValue) #if not a face card, the value is just the rank
         return cValue #returns the value
 
-    def handValue(hand): #calculates the value of the player's hand
+    def handValue(self, hand): #calculates the value of the player's hand
         values = [] #sets the variable values
 
         for c in hand: #for each card in hand, add the value of that card to a list
-            values.append(blackjack.value(c))
+            values.append(self.value(c))
         if "A" not in values:
             hValue = sum(values)
             return hValue #if there are no aces to decide, return the value of the hand
@@ -88,152 +85,134 @@ class blackjack:
                 hValue += aces
                 return hValue
 
-    def hit(hand): #hit and draw a card
-        global deck
-
-        card = random.sample(deck, 1)[0]
+    def hit(self, hand): #hit and draw a card
+        card = random.sample(self.deck, 1)[0]
         hand.append(card) #adds a random card from the deck to hand
-        deck = [x for x in deck if x not in card] #removes said card from the deck
+        self.deck = [x for x in self.deck if x not in card] #removes said card from the deck
         #print(hand) #debugging
 
-    def bust(player):
-        global pHand, pBet, pCredit, dHand
-
-        if blackjack.handValue(player) > 21: #if the hand value is greater than 21, the hand's owner is bust
-            if player == pHand: #if it's the player who's gone bust,
+    def bust(self, player):
+        if self.handValue(player) > 21: #if the hand value is greater than 21, the hand's owner is bust
+            if player == self.pHand: #if it's the player who's gone bust,
                 print("\n"*100+"You've gone bust with a hand of:") #shows the player their loosing hand
-                for c in pHand:
-                    print(blackjack.card(c))
-                blackjack.again() #checks if they want to play again
+                for c in self.pHand:
+                    print(self.card(c))
+                self.again() #checks if they want to play again
             else:
                 print("The Dealer has gone bust, you win this round")
-                print("You win the round!\nThe value of the dealer's hand was "+str(blackjack.handValue(dHand))+" versus your "+str(blackjack.handValue(pHand)))
-                pCredit += pBet * 2 #double the bet for winning
-                print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
-                blackjack.again() #checks if they want to play again
+                print("You win the round!\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
+                self.pCredit += self.pBet * 2 #double the bet for winning
+                print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
+                self.again() #checks if they want to play again
 
-    def again(): #lets the player decide to play another round, or quit
-        global pCredit
-
+    def again(self): #lets the player decide to play another round, or quit
         print("\nPlay another round?")
         again = input("Y/N\n")
         if again.upper() == "Y":
-            blackjack.gameStart()
+            self.gameStart()
         elif again.upper() == "N":
-            print("You leave with "+str(pCredit)+" credits") #displays the players leaving credits
-            exit()
+            print("You leave with "+str(self.pCredit)+" credits") #displays the players leaving credits
+            raise SystemExit
         else: #if the input is not 'y' or 'n' ask again
-            blackjack.again()
+            self.again()
 
-    def computer(): #handles the dealer's turn, hits on <17 stands on 17
-        global dHand
-
-        if blackjack.handValue(dHand) < 17: #if the dealer has less than 17, they hit
+    def computer(self): #handles the dealer's turn, hits on <17 stands on 17
+        if self.handValue(self.dHand) < 17: #if the dealer has less than 17, they hit
             print("\nThe dealer hits\n")
-            blackjack.hit(dHand) #dealer hits
-            if blackjack.handValue(dHand) < 17: #if the dealer still has less than 17, they hit again
-                blackjack.computer()
+            self.hit(self.dHand) #dealer hits
+            if self.handValue(self.dHand) < 17: #if the dealer still has less than 17, they hit again
+                self.computer()
             else:
-                blackjack.bust(dHand) # if they are above 17 after hitting, they check if they have gone bust
-                pass
+                self.bust(self.dHand) # if they are above 17 after hitting, they check if they have gone bust
         else:
             print("\nThe dealer stands\n") #if the dealer is above 17, they stand
-            pass
 
-    def bet(): #handles the player's bets
-        global pCredit, pBet
-
-        print("You have "+str(pCredit)+" Credits to bet")
+    def bet(self): #handles the player's bets
+        print("\n"*100+"You have "+str(self.pCredit)+" Credits to bet")
         bet = input("How much would you like to bet on this round?\n")
-        if int(bet) > pCredit:
+        if int(bet) > self.pCredit:
             print("\n"*100+"You can't bet more credits than you have\n")
-            blackjack.bet()
-        elif int(bet) < 4:
+        elif int(bet) < 5:
             print("\n"*100+"You must bet at least 5 Credits to play\n")
-            blackjack.bet()
+            self.bet()
         else:
-            pBet = int(bet)
-            pCredit = pCredit - pBet #takes the players bet form their total credits
-            print("\n"*100+"You've placed a bet of "+str(pBet)+" Credits on this round\n")
+            self.pBet = int(bet)
+            self.pCredit -= self.pBet #takes the players bet form their total credits
+            print("\n"*100+"You've placed a bet of "+str(self.pBet)+" Credits on this round\n")
 
-    def gameStart():
-        global deck, pHand, dHand
-
+    def gameStart(self):
         suits = "cdhs" #sets the four suits
         ranks = "23456789TJQKA" #sets each possible rank
-        deck = list("".join(card) for card in itertools.product(suits, ranks)) #generates the starting deck, with each possible card
+        self.deck = list("".join(card) for card in itertools.product(suits, ranks)) #generates the starting deck, with each possible card
 
         print("\n"*100+"The Dealer will always stand on a 17")
         time.sleep(3)
         print("\n"*100)
 
-        blackjack.deal() #starts the round, dealing out 2 cards to the dealer and the player
-        blackjack.bet() #takes the player's bet
+        self.deal() #starts the round, dealing out 2 cards to the dealer and the player
+        self.bet() #takes the player's bet
 
         print("You are dealt:")
-        for c in pHand: #shows the player the cards they have been dealt
-            print(blackjack.card(c))
-        print("Value of your hand: "+str(blackjack.handValue(pHand))) #shows the player the value of their hand
-        print("\nTotal cards in deck "+str(len(deck))+"    Dealer's hand: "+str(len(dHand))+" cards") #show the player other information they might want to know
+        for c in self.pHand: #shows the player the cards they have been dealt
+            print(self.card(c))
+        print("Value of your hand: "+str(self.handValue(self.pHand))) #shows the player the value of their hand
+        print("\nTotal cards in deck "+str(len(self.deck))+"    Dealer's hand: "+str(len(self.dHand))+" cards") #show the player other information they might want to know
 
-        blackjack.action() #lets the player choose their actions, hit or stand
-        blackjack.computer() #the dealer takes their turn, standing on a 17
-        blackjack.showdown() #handles the showdown, working out the winner and handing out any relevant prize credits
+        self.action() #lets the player choose their actions, hit or stand
+        self.computer() #the dealer takes their turn, standing on a 17
+        self.showdown() #handles the showdown, working out the winner and handing out any relevant prize credits
 
-    def action():
-        global pHand
-
+    def action(self):
         action = input("\nChoose your action: Hit or Stand\n") #takes the user's input
         if action.upper() == "HIT":
-            blackjack.hit(pHand) #if the player hits, hit their hand
+            self.hit(self.pHand) #if the player hits, hit their hand
             print("\n"*100+"Your hand is now:")
-            for c in pHand: #shows the player their new hand
-                print(blackjack.card(c))
-            print("\nValue of your hand: "+str(blackjack.handValue(pHand))) #shows the player their new hand's value
-            blackjack.bust(pHand) #checks if the player's new hand makes them go bust
-            blackjack.action() #if they aren't bust, lets them take another action
+            for c in self.pHand: #shows the player their new hand
+                print(self.card(c))
+            print("\nValue of your hand: "+str(self.handValue(self.pHand))) #shows the player their new hand's value
+            self.bust(self.pHand) #checks if the player's new hand makes them go bust
+            self.action() #if they aren't bust, lets them take another action
         elif action.upper() == "STAND": #if the player stands,
             print("\n"*100+"You choose to stand") #tells the player their action
         else:
             print("\n"*100+"Invalid action, hit or stand") #if they don't choose a correct action, ask them again
-            blackjack.action()
+            self.action()
 
-    def showdown(): #for finding the winner of a game
-        global pHand, dHand, pBet, pCredit, dCredit
-
-        if blackjack.handValue(dHand) < blackjack.handValue(pHand): #if the player has a higher valued hand than the dealer, the player wins
-            print("You win the round!\nThe value of the dealer's hand was "+str(blackjack.handValue(dHand))+" versus your "+str(blackjack.handValue(pHand)))
-            pCredit += pBet * 2
-            print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
-        elif blackjack.handValue(dHand) > blackjack.handValue(pHand): #if the dealer has a higher valued hand than the player, the player loses
-            print("You lose the round\nThe value of the dealer's hand was "+str(blackjack.handValue(dHand))+" versus your "+str(blackjack.handValue(pHand)))
-        elif blackjack.handValue(dHand) == blackjack.handValue(pHand) and blackjack.handValue(pHand) != 21: #if the player and the dealer have the same valued hand that isn't 21 it's a push
-            pCredit += pBet #the player gets back their bet
-            print("It's a push, the dealer has the same total as you!\nYour bet of "+str(pBet)+" Credits has been returned. You now have "+str(pCredit)+" Credits")
-        elif blackjack.handValue(dHand) == 21: #if the dealer has 21
-            if blackjack.handValue(pHand) != 21: #if the player doesn't have 21
+    def showdown(self): #for finding the winner of a game
+        if self.handValue(self.dHand) < self.handValue(self.pHand): #if the player has a higher valued hand than the dealer, the player wins
+            print("You win the round!\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
+            self.pCredit += self.pBet * 2
+            print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
+        elif self.handValue(self.dHand) > self.handValue(self.pHand): #if the dealer has a higher valued hand than the player, the player loses
+            print("You lose the round\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
+        elif self.handValue(self.dHand) == self.handValue(self.pHand) and self.handValue(self.pHand) != 21: #if the player and the dealer have the same valued hand that isn't 21 it's a push
+            self.pCredit += self.pBet #the player gets back their bet
+            print("It's a push, the dealer has the same total as you!\nYour bet of "+str(self.pBet)+" Credits has been returned. You now have "+str(self.pCredit)+" Credits")
+        elif self.handValue(self.dHand) == 21: #if the dealer has 21
+            if self.handValue(self.pHand) != 21: #if the player doesn't have 21
                 print("You lose the round\nThe dealer achieved 21") #the player loses
-            elif len(dHand) < len(pHand): #if the player also has 21, but has more cards than the dealer
+            elif len(self.dHand) < len(self.pHand): #if the player also has 21, but has more cards than the dealer
                 print("You lose the round\nThe dealer achieved 21 with less cards than you") #the player loses
-            elif len(dHand) > len(pHand): #if the player also has 21, but has less cards than the dealer
+            elif len(self.dHand) > len(self.pHand): #if the player also has 21, but has less cards than the dealer
                 print("You win the round!\nThe you achieved 21 with less cards than the dealer") #the player wins
-                if len(pHand) == 2: #if the player also has a natural blackjack
-                    pCredit += round(pBet * 2.5) #they get an extra prize
-                    print("\nYou've won "+str(round(pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
+                if len(self.pHand) == 2: #if the player also has a natural blackjack
+                    self.pCredit += round(self.pBet * 2.5) #they get an extra prize
+                    print("\nYou've won "+round(self.pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
                 else:
-                    pCredit += pBet * 2 #else they only have a normal blackjack, a normal prize
-                    print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
-        elif blackjack.handvalue(pHand) == 21: #if the player has 21, but the dealer doesn't
-            if len(pHand) == 2: #if the player also has a natural blackjack
-                pCredit += round(pBet * 2.5) #they get an extra prize
-                print("\nYou've won "+str(round(pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
+                    self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
+                    print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
+        elif self.handValue(self.pHand) == 21: #if the player has 21, but the dealer doesn't
+            if len(self.pHand) == 2: #if the player also has a natural blackjack
+                self.pCredit += round(self.pBet * 2.5) #they get an extra prize
+                print("\nYou've won "+round(self.pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
             else:
-                pCredit += pBet * 2 #else they only have a normal blackjack, a normal prize
-                print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
+                self.pCredit += self.pBet * 2 #else they only have a normal blackjack, a normal prize
+                print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
         else:
-            pCredit += pBet #else it's a push, the player gets back their bet
-            print("It's a push, the dealer has the same total as you!\nYour bet of "+str(pBet)+" Credits has been returned. You now have "+str(pCredit)+" Credits")
+            self.pCredit += self.pBet #else it's a push, the player gets back their bet
+            print("It's a push, the dealer has the same total as you!\nYour bet of "+str(self.pBet)+" Credits has been returned. You now have "+str(self.pCredit)+" Credits")
 
-        blackjack.again() #checks if they want to play again
+        self.again() #checks if they want to play again
 
-blackjack.gameStart() #starts the first round
+game = Blackjack()
+game.gameStart() #starts the first round
