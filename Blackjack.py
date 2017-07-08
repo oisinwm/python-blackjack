@@ -128,7 +128,7 @@ class Blackjack:
             print("\nThe dealer stands\n") #if the dealer is above 17, they stand
 
     def bet(self): #handles the player's bets
-        print("\n"*100+"You have "+str(self.pCredit)+" Credits to bet")
+        print("You have "+str(self.pCredit)+" Credits to bet")
         bet = input("How much would you like to bet on this round?\n")
         if int(bet) > self.pCredit:
             print("\n"*100+"You can't bet more credits than you have\n")
