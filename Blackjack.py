@@ -219,14 +219,14 @@ class blackjack:
                 print("You win the round!\nThe you achieved 21 with less cards than the dealer") #the player wins
                 if len(pHand) == 2: #if the player also has a natural blackjack
                     pCredit += round(pBet * 2.5) #they get an extra prize
-                    print("\nYou've won "+round(pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
+                    print("\nYou've won "+str(round(pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
                 else:
                     pCredit += pBet * 2 #else they only have a normal blackjack, a normal prize
                     print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
         elif blackjack.handvalue(pHand) == 21: #if the player has 21, but the dealer doesn't
             if len(pHand) == 2: #if the player also has a natural blackjack
                 pCredit += round(pBet * 2.5) #they get an extra prize
-                print("\nYou've won "+round(pBet * 2.5)+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
+                print("\nYou've won "+str(round(pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(pCredit)+" Credits")
             else:
                 pCredit += pBet * 2 #else they only have a normal blackjack, a normal prize
                 print("\nYou've won "+str(pBet*2)+" Credits! You now have "+str(pCredit)+" Credits")
