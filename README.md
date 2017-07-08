@@ -1,5 +1,5 @@
 # python-blackjack
-A game of Blackjack (21) written in Python 3
+A simple game of Blackjack (21) written in Python 3.6.1
 
 Required libraries: itertools, random, time
 
