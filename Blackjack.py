@@ -5,10 +5,10 @@ class Blackjack:
 
     pHand = [] #sets the player's empty hand
     dHand = [] #sets the dealer's empty hand
-
     pCredit = 100 #sets the player's starting credit
     pBet = 0
     #dCredit = 10000 #sets the credit for the dealer, currently unused
+    
     def deal(self): # deals ths hand by taking two random cards from the deck and removing them, does this for both the player and the dealer
         self.pHand = random.sample(self.deck, 2)
         self.deck = [x for x in self.deck if x not in self.pHand]
@@ -98,11 +98,15 @@ class Blackjack:
                 for c in self.pHand:
                     print(self.card(c))
                 self.again() #checks if they want to play again
-            else:
+            else: #the dealer has gone bust
                 print("The Dealer has gone bust, you win this round")
                 print("You win the round!\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
-                self.pCredit += self.pBet * 2 #double the bet for winning
-                print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
+                if self.handValue(self.pHand) == 21 and len(self.pHand) == 2: #if the player has a natural blackjack
+                    self.pCredit += round(self.pBet * 2.5) #they get an extra prize
+                    print("\nYou've won "+str(round(self.pBet * 2.5))+" Credits with a natural blackjack! You now have "+str(self.pCredit)+" Credits")
+                else: #otherwise
+                    self.pCredit += self.pBet * 2 #double the bet for winning
+                    print("\nYou've won "+str(self.pBet*2)+" Credits! You now have "+str(self.pCredit)+" Credits")
                 self.again() #checks if they want to play again
 
     def again(self): #lets the player decide to play another round, or quit
