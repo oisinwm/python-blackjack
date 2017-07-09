@@ -8,7 +8,7 @@ class Blackjack:
     pCredit = 100 #sets the player's starting credit
     pBet = 0
     #dCredit = 10000 #sets the credit for the dealer, currently unused
-    
+
     def deal(self): # deals ths hand by taking two random cards from the deck and removing them, does this for both the player and the dealer
         self.pHand = random.sample(self.deck, 2)
         self.deck = [x for x in self.deck if x not in self.pHand]
@@ -57,13 +57,13 @@ class Blackjack:
         elif toValue == "K":
             cValue = 10
         elif toValue == "A":
-            cValue = "A" #sets the value of an ace to A, so it can be decided to be 1 or 11
+            cValue = "A" #sets the value of an ace to A, so it can be decided to be 1 or 11 later
         else:
-            cValue = int(toValue) #if not a face card, the value is just the rank
+            cValue = int(toValue) #if not a face card or 10, the value is just the rank
         return cValue #returns the value
 
     def handValue(self, hand): #calculates the value of the player's hand
-        values = [] #sets the variable values
+        values = [] #sets the empty variable values
 
         for c in hand: #for each card in hand, add the value of that card to a list
             values.append(self.value(c))
@@ -86,12 +86,12 @@ class Blackjack:
                 return hValue
 
     def hit(self, hand): #hit and draw a card
-        card = random.sample(self.deck, 1)[0]
-        hand.append(card) #adds a random card from the deck to hand
+        card = random.sample(self.deck, 1)[0] #selects 1 random card from the shuffled deck
+        hand.append(card) #adds the random card from the deck to hand
         self.deck = [x for x in self.deck if x not in card] #removes said card from the deck
         #print(hand) #debugging
 
-    def bust(self, player):
+    def bust(self, player): #checks if a hand is bust (value over 21)
         if self.handValue(player) > 21: #if the hand value is greater than 21, the hand's owner is bust
             if player == self.pHand: #if it's the player who's gone bust,
                 print("\n"*100+"You've gone bust with a hand of:") #shows the player their loosing hand
@@ -99,7 +99,7 @@ class Blackjack:
                     print(self.card(c))
                 self.again() #checks if they want to play again
             else: #the dealer has gone bust
-                print("The Dealer has gone bust, you win this round")
+                print("The Dealer has gone bust!")
                 print("You win the round!\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
                 if self.handValue(self.pHand) == 21 and len(self.pHand) == 2: #if the player has a natural blackjack
                     self.pCredit += round(self.pBet * 2.5) #they get an extra prize
@@ -145,12 +145,12 @@ class Blackjack:
             self.pCredit -= self.pBet #takes the players bet form their total credits
             print("\n"*100+"You've placed a bet of "+str(self.pBet)+" Credits on this round\n")
 
-    def gameStart(self):
+    def gameStart(self): #starts the game, called at the begining of every round
         suits = "cdhs" #sets the four suits
         ranks = "23456789TJQKA" #sets each possible rank
         self.deck = list("".join(card) for card in itertools.product(suits, ranks)) #generates the starting deck, with each possible card
 
-        print("\n"*100+"The Dealer will always stand on a 17")
+        print("\n"*100+"The Dealer will always stand on a 17") #shows the table rules
         time.sleep(3)
         print("\n"*100)
 
@@ -167,7 +167,7 @@ class Blackjack:
         self.computer() #the dealer takes their turn, standing on a 17
         self.showdown() #handles the showdown, working out the winner and handing out any relevant prize credits
 
-    def action(self):
+    def action(self): #lets the player choose an action, choice of hit or stand
         action = input("\nChoose your action: Hit or Stand\n") #takes the user's input
         if action.upper() == "HIT":
             self.hit(self.pHand) #if the player hits, hit their hand
