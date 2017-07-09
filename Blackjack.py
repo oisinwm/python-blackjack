@@ -99,7 +99,7 @@ class Blackjack:
                     print(self.card(c))
                 self.again() #checks if they want to play again
             else: #the dealer has gone bust
-                print("The Dealer has gone bust, you win this round")
+                print("The Dealer has gone bust!")
                 print("You win the round!\nThe value of the dealer's hand was "+str(self.handValue(self.dHand))+" versus your "+str(self.handValue(self.pHand)))
                 if self.handValue(self.pHand) == 21 and len(self.pHand) == 2: #if the player has a natural blackjack
                     self.pCredit += round(self.pBet * 2.5) #they get an extra prize
