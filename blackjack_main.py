@@ -36,6 +36,15 @@ class Player:
     def hand_value(self):
         return self._hand_value
 
+    def hit(self):
+        pass
+
+    def stand(self):
+        pass
+
+    def bust_check(self):
+        pass
+
 
 class Card:
     def __init__(self, cardCode):
