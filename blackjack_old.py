@@ -147,7 +147,7 @@ class Blackjack:
             self.pCredit -= self.pBet #takes the players bet form their total credits
             print("\n"*100+"You've placed a bet of "+str(self.pBet)+" Credits on this round\n")
 
-    def gameStart(self): #starts the game, called at the begining of every round
+    def gameStart(self): #starts the game, called at the beginning of every round
         suits = "cdhs" #sets the four suits
         ranks = "23456789TJQKA" #sets each possible rank
         self.deck = list("".join(card) for card in itertools.product(suits, ranks)) #generates the starting deck, with each possible card
